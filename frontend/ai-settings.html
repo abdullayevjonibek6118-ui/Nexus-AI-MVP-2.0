@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки ИИ - Nexus AI</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="app-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <img src="img/logo.jpg" alt="Logo" style="height: 28px; border-radius: 6px;">
+                    Nexus AI
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    </svg>
+                    Дашборд
+                </a>
+                <a href="vacancies.html" class="sidebar-link">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Вакансии
+                </a>
+                <a href="candidates.html" class="sidebar-link">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    Кандидаты
+                </a>
+                <a href="analytics.html" class="sidebar-link">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Аналитика
+                </a>
+                <a href="activity.html" class="sidebar-link">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    История
+                </a>
+                <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 0.5rem 0;"></div>
+                <a href="ai-settings.html" class="sidebar-link active">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Настройки ИИ
+                </a>
+                <a href="settings.html" class="sidebar-link">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Настройки
+                </a>
+                <div style="flex:1"></div>
+                <a href="#" onclick="Api.logout()" class="sidebar-link">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Выйти
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; color:#111827;">Настройки ИИ-Агента
+            </h1>
+            <p style="color: #64748B; margin-bottom: 2rem;">Настройте поведение AI для анализа резюме</p>
+
+            <div class="card" style="max-width: 800px;">
+                <form id="aiSettingsForm">
+                    <!-- AI Role -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label class="form-label">Роль ИИ</label>
+                        <input type="text" id="ai_role" class="form-input" placeholder="Эксперт по подбору персонала">
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem;">
+                            Определяет, как ИИ будет представляться при анализе
+                        </p>
+                    </div>
+
+                    <!-- System Prompt -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label class="form-label">Системный Промпт</label>
+                        <textarea id="system_prompt" rows="8" class="form-input"
+                            placeholder="Вы - опытный HR-специалист..."></textarea>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem;">
+                            Инструкции для ИИ о том, как анализировать резюме
+                        </p>
+                    </div>
+
+                    <!-- Model Selection -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label class="form-label">Модель ИИ</label>
+                        <select id="model_name" class="form-input">
+                            <option value="x-ai/grok-4.1-fast">Grok 4.1 Fast (Рекомендуется)</option>
+                            <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
+                            <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet</option>
+                        </select>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem;">
+                            Выберите AI модель для анализа
+                        </p>
+                    </div>
+
+                    <!-- Temperature Slider -->
+                    <div style="margin-bottom: 2rem;">
+                        <label class="form-label">Температура: <span id="temp-value">0.7</span></label>
+                        <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7"
+                            style="width: 100%; accent-color: var(--primary-color);">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+                            <span>Точный (0.0)</span>
+                            <span>Креативный (1.0)</span>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.5rem;">
+                            Низкая температура = более предсказуемые ответы, высокая = более креативные
+                        </p>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="submit" class="btn btn-primary">Сохранить настройки</button>
+                        <button type="button" class="btn btn-outline" onclick="resetToDefaults()">Сбросить</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Info Card -->
+            <div class="card"
+                style="max-width: 800px; margin-top: 2rem; background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%); border: 1px solid #C7D2FE;">
+                <h3 style="margin-bottom: 1rem; color: #4338CA;">💡 Советы по настройке</h3>
+                <ul style="color: #4338CA; line-height: 1.8;">
+                    <li>Используйте конкретные инструкции в системном промпте</li>
+                    <li>Для технических вакансий укажите фокус на hard skills</li>
+                    <li>Температура 0.7 оптимальна для большинства случаев</li>
+                    <li>Grok 4.1 Fast обеспечивает лучший баланс скорости и качества</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/ai-settings.js"></script>
+</body>
+
+</html>

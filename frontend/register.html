@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Nexus AI</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <div class="auth-page">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <img src="img/logo.jpg" alt="Nexus AI logo" style="height: 40px; border-radius: 8px;">
+                <span
+                    style="font-size: 1.5rem; font-weight: 700; margin-left: 0.75rem; color: #1E293B; align-self: center;">Nexus
+                    AI</span>
+            </div>
+
+            <h2 style="text-align: center; margin-bottom: 0.5rem; font-size: 1.5rem;">Создать Аккаунт</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem; text-align: center;">Начните работу с
+                AI-рекрутингом</p>
+
+            <div id="error-msg" class="hidden"
+                style="background: #FEE2E2; color: #991B1B; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 0.875rem; text-align: center;">
+            </div>
+
+            <form id="registerForm">
+                <div style="margin-bottom: 1rem;">
+                    <label class="form-label">Полное Имя</label>
+                    <input type="text" id="full_name" class="form-input" placeholder="Иван Иванов" required>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="name@company.com" required>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" id="password" class="form-input" placeholder="Минимум 8 символов" required
+                        minlength="8">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label class="form-label">Подтвердите Пароль</label>
+                    <input type="password" id="confirm_password" class="form-input" placeholder="Повторите пароль"
+                        required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Зарегистрироваться</button>
+            </form>
+
+            <p style="margin-top: 2rem; text-align: center; color: var(--text-muted);">
+                Уже есть аккаунт? <a href="login.html"
+                    style="color: var(--primary-color); text-decoration: none; font-weight: 500;">Войти</a>
+            </p>
+        </div>
+    </div>
+    <script src="js/api.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const errorMsg = document.getElementById('error-msg');
+            errorMsg.classList.add('hidden');
+
+            const full_name = document.getElementById('full_name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirm_password = document.getElementById('confirm_password').value;
+
+            if (password !== confirm_password) {
+                errorMsg.textContent = 'Пароли не совпадают';
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                await Api.post('/auth/register', { email, password, full_name });
+                window.location.href = 'login.html?registered=true';
+            } catch (error) {
+                errorMsg.textContent = error.message || 'Ошибка регистрации';
+                errorMsg.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>
