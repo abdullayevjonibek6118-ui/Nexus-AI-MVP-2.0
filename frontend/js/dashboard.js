@@ -3,12 +3,63 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         const analytics = await Api.get("/analytics/");
 
-        document.getElementById("active-vacancies").textContent = analytics.active_vacancies;
-        document.getElementById("total-candidates").textContent = analytics.total_candidates;
-        document.getElementById("avg-score").textContent = analytics.avg_ai_score;
+        // Load Subscription Status
+        try {
+            const status = await Api.get('/candidates/subscription/status');
+            const widget = document.getElementById('subscription-status-widget');
+            if (widget) {
+                widget.style.display = 'block';
+                document.getElementById('widget-tier-name').innerText = status.tier_name;
+
+                const badge = document.getElementById('widget-status-badge');
+                if (status.is_expired) {
+                    badge.innerText = 'Истек';
+                    badge.className = 'badge bg-red';
+                } else if (status.is_trial) {
+                    badge.innerText = 'Пробный';
+                    badge.className = 'badge bg-blue';
+                } else {
+                    badge.innerText = 'Активен';
+                    badge.className = 'badge bg-green';
+                }
+
+                if (status.is_trial) {
+                    document.getElementById('widget-days-left').innerText = `Осталось дней: ${status.days_left}`;
+                } else {
+                    document.getElementById('widget-days-left').innerText = 'Бессрочная подписка';
+                }
+
+                const used = status.used;
+                const limit = status.limit;
+                const percent = Math.min(100, (used / limit) * 100);
+
+                document.getElementById('widget-usage-text').innerText = `${used} / ${limit}`;
+                const progressBar = document.getElementById('widget-progress-bar');
+                progressBar.style.width = `${percent}%`;
+
+                // Color logic
+                const remaining = 100 - percent;
+                if (remaining > 50) {
+                    progressBar.style.backgroundColor = '#10B981'; // Green
+                } else if (remaining > 20) {
+                    progressBar.style.backgroundColor = '#F59E0B'; // Yellow
+                } else {
+                    progressBar.style.backgroundColor = '#EF4444'; // Red
+                }
+            }
+        } catch (subErr) {
+            console.error("Failed to load subscription status in widget", subErr);
+        }
+
+        document.getElementById("stat-active-vacancies").textContent = analytics.active_vacancies;
+        document.getElementById("stat-total-candidates").textContent = analytics.total_candidates;
+        // avg-score is not in the stats but we can add it or ignore if not present
+        if (document.getElementById("avg-score")) {
+            document.getElementById("avg-score").textContent = analytics.avg_ai_score;
+        }
 
         const vacancies = await Api.get("/vacancies/");
-        const tbody = document.querySelector("#vacancies-table tbody");
+        const tbody = document.getElementById("vacancies-table-body");
         tbody.innerHTML = "";
 
         if (vacancies.length === 0) {

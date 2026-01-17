@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация - Nexus AI</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/main.css?v=1.4">
+    <link rel="icon" href="img/logo.jpg" type="image/jpeg">
 </head>
 
 <body>
@@ -55,32 +56,8 @@
         </div>
     </div>
     <script src="js/api.js"></script>
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const errorMsg = document.getElementById('error-msg');
-            errorMsg.classList.add('hidden');
-
-            const full_name = document.getElementById('full_name').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirm_password = document.getElementById('confirm_password').value;
-
-            if (password !== confirm_password) {
-                errorMsg.textContent = 'Пароли не совпадают';
-                errorMsg.classList.remove('hidden');
-                return;
-            }
-
-            try {
-                await Api.post('/auth/register', { email, password, full_name });
-                window.location.href = 'login.html?registered=true';
-            } catch (error) {
-                errorMsg.textContent = error.message || 'Ошибка регистрации';
-                errorMsg.classList.remove('hidden');
-            }
-        });
-    </script>
+    <script src="js/ui-utils.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 
 </html>

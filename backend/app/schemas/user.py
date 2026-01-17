@@ -11,10 +11,12 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     email: EmailStr
     password: str
+    full_name: Optional[str] = None
 
 # Properties to return via API
 class User(UserBase):
     id: int
+    hh_connected: bool = False
 
     class Config:
         orm_mode = True

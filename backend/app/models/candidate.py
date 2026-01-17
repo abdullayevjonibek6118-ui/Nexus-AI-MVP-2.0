@@ -18,5 +18,7 @@ class Candidate(Base):
     summary = Column(Text)
     recommendation = Column(String)
     status = Column(String, default="NEW") # NEW, SHORTLIST, REJECTED, APPROVED
+    hh_resume_id = Column(String, index=True, nullable=True)
+    screening_questions = Column(JSON, nullable=True)
 
     vacancy = relationship("app.models.vacancy.Vacancy", backref="candidates")

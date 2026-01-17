@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Настройки ИИ - Nexus AI</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/main.css?v=1.4">
+    <link rel="icon" href="img/logo.jpg" type="image/jpeg">
 </head>
 
 <body>
@@ -121,12 +122,14 @@
                     <div style="margin-bottom: 1.5rem;">
                         <label class="form-label">Модель ИИ</label>
                         <select id="model_name" class="form-input">
-                            <option value="x-ai/grok-4.1-fast">Grok 4.1 Fast (Рекомендуется)</option>
+                            <option value="GigaChat">GigaChat (Sber) - Лучшая для RU</option>
+                            <option value="nex-agi/deepseek-v3.1-nex-n1:free">DeepSeek v3.1 (Рекомендуется)</option>
+                            <option value="x-ai/grok-4.1-fast">Grok 4.1 Fast</option>
                             <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
                             <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet</option>
                         </select>
                         <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem;">
-                            Выберите AI модель для анализа
+                            Выберите AI модель для анализа. GigaChat лучше всего работает с русским языком.
                         </p>
                     </div>
 
@@ -161,7 +164,8 @@
                     <li>Используйте конкретные инструкции в системном промпте</li>
                     <li>Для технических вакансий укажите фокус на hard skills</li>
                     <li>Температура 0.7 оптимальна для большинства случаев</li>
-                    <li>Grok 4.1 Fast обеспечивает лучший баланс скорости и качества</li>
+                    <li>GigaChat - отличный выбор для анализа кандидатов на русском языке</li>
+                    <li>DeepSeek v3.1 обеспечивает лучший баланс скорости и качества</li>
                 </ul>
             </div>
         </main>

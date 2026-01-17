@@ -20,9 +20,11 @@ class Candidate(CandidateBase):
     vacancy_id: int
     skills_match: Optional[List[str]] = []
     missing_skills: Optional[List[str]] = []
+    hh_resume_id: Optional[str] = None
+    screening_questions: Optional[List[str]] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class CandidateAnalysisResult(BaseModel):
     score: float
@@ -30,3 +32,4 @@ class CandidateAnalysisResult(BaseModel):
     missing_skills: List[str]
     summary: str
     recommendation: str
+    screening_questions: Optional[List[str]] = []

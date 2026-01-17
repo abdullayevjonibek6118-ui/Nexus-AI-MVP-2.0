@@ -5,31 +5,24 @@ document.addEventListener("DOMContentLoaded", () => {
     if (loginForm) {
         loginForm.addEventListener("submit", async (e) => {
             e.preventDefault();
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
             const errorDiv = document.getElementById("error-msg");
 
             try {
-                // Since OAuth2PasswordRequestForm expects form data
                 const formData = new URLSearchParams();
                 formData.append('username', email);
                 formData.append('password', password);
 
-                const response = await fetch("http://localhost:8000/api/auth/login", {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: formData
-                });
+                const data = await Api.post("/auth/login", formData);
 
-                if (!response.ok) {
-                    throw new Error("Login failed");
-                }
-
-                const data = await response.json();
                 Api.token = data.access_token;
                 window.location.href = "dashboard.html";
             } catch (err) {
-                errorDiv.textContent = "Invalid email or password";
+                if (window.UI) {
+                    UI.notify("Неверный email или пароль", "error");
+                }
+                errorDiv.textContent = "Неверный email или пароль";
                 errorDiv.classList.remove("hidden");
             }
         });
@@ -42,14 +35,36 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm_password") ? document.getElementById("confirm_password").value : "";
+            const fullName = document.getElementById("full_name") ? document.getElementById("full_name").value : "";
             const errorDiv = document.getElementById("error-msg");
 
+            if (confirmPassword && password !== confirmPassword) {
+                const msg = "Пароли не совпадают";
+                if (window.UI) UI.notify(msg, "error");
+                errorDiv.textContent = msg;
+                errorDiv.classList.remove("hidden");
+                return;
+            }
+
             try {
-                await Api.post("/auth/register", { email, password });
-                // Auto login after register or redirect to login
-                window.location.href = "login.html";
-                alert("Registration successful! Please login.");
+                await Api.post("/auth/register", {
+                    email,
+                    password,
+                    full_name: fullName
+                });
+
+                if (window.UI) {
+                    UI.notify("Регистрация успешна!", "success");
+                }
+
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 1500);
             } catch (err) {
+                if (window.UI) {
+                    UI.notify(err.message, "error");
+                }
                 errorDiv.textContent = err.message;
                 errorDiv.classList.remove("hidden");
             }

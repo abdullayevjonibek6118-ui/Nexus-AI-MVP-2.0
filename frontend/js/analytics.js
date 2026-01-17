@@ -11,97 +11,66 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadAnalytics() {
     try {
-        const candidates = await Api.get('/candidates/'); // Fetch all for calc
-        const vacancies = await Api.get('/vacancies/');
+        // Fetch analytics from backend which now returns advanced metrics
+        const data = await Api.get('/analytics/');
 
-        // 1. Calculate Core Metrics
-        const activeVacancies = vacancies.filter(v => v.status === 'published').length;
-        const analyzedCandidates = candidates.filter(c => c.ai_score !== null);
-        const avgScore = analyzedCandidates.length > 0
-            ? Math.round(analyzedCandidates.reduce((sum, c) => sum + c.ai_score, 0) / analyzedCandidates.length)
-            : 0;
+        // Update KPI Cards
+        document.getElementById('avg-ai-score').textContent = data.avg_ai_score + '%';
+        document.getElementById('active-vacancies').textContent = data.active_vacancies;
 
-        // Simple "Time to Hire" mock (randomized or 0 if no data) as backend doesn't track hired date yet
-        const timeToHire = 14;
+        // New Metrics
+        if (data.metrics) {
+            document.getElementById('time-to-hire').textContent = data.metrics.time_to_hire + ' days';
+        }
 
-        // Update Stat Cards
-        document.getElementById('avg-ai-score').textContent = avgScore + '%';
-        document.getElementById('time-to-hire').textContent = timeToHire;
-        document.getElementById('active-vacancies').textContent = activeVacancies;
+        // 2. Prepare Chart Data from Backend Response
 
-        // 2. Prepare Chart Data
+        // Score Distribution (We can keep this calculated frontend or assume backend might send it later. 
+        // For now, let's keep the frontend calc if backend doesn't send specific distro, 
+        // but wait, backend currently sends: active_vacancies, total, avg, status_breakdown, sources, top_skills, metrics.
+        // It does NOT send score_distribution list yet. So we might need to fetch candidates if we want that detail,
+        // OR we can rely on what we have.
+        // To be safe and efficient, let's use the status_breakdown from backend directly.
 
-        // Score Distribution
-        const scoreRanges = ['0-20', '21-40', '41-60', '61-80', '81-100'];
-        const scoreCounts = [0, 0, 0, 0, 0];
+        const statusData = {
+            labels: Object.keys(data.status_breakdown).map(s => s.charAt(0).toUpperCase() + s.slice(1)),
+            data: Object.values(data.status_breakdown),
+            colors: ['#3b82f6', '#7c3aed', '#f59e0b', '#8b5cf6', '#10b981', '#ef4444']
+        };
 
-        analyzedCandidates.forEach(c => {
-            const score = c.ai_score;
-            if (score <= 20) scoreCounts[0]++;
-            else if (score <= 40) scoreCounts[1]++;
-            else if (score <= 60) scoreCounts[2]++;
-            else if (score <= 80) scoreCounts[3]++;
-            else scoreCounts[4]++;
-        });
+        // Funnel Data (from metrics)
+        const funnel = data.metrics.funnel_conversion;
+        const funnelData = {
+            labels: ['New -> Screened', 'Screened -> Interview', 'Interview -> Offer'],
+            data: [funnel.new_to_screened, funnel.screened_to_interview, funnel.interview_to_offer]
+        };
 
-        // Status Distribution
-        const statuses = ['new', 'screening', 'shortlist', 'interview', 'hired', 'rejected'];
-        const statusLabels = ['New', 'Screening', 'Shortlist', 'Interview', 'Hired', 'Rejected'];
-        const statusCounts = statuses.map(s => candidates.filter(c => c.status === s).length);
-        const statusColors = ['#3b82f6', '#7c3aed', '#f59e0b', '#8b5cf6', '#10b981', '#ef4444'];
-
-        // Vacancy Scores (Top 5)
-        const topVacancies = vacancies
-            .filter(v => typeof v.avg_score === 'number' && v.avg_score > 0)
-            .sort((a, b) => b.avg_score - a.avg_score)
-            .slice(0, 5);
-
-        const vacLabels = topVacancies.map(v => v.title.length > 15 ? v.title.substring(0, 15) + '...' : v.title);
-        const vacScores = topVacancies.map(v => v.avg_score);
-
-        // 3. Render Charts (Lazy load Chart.js logic)
+        // 3. Render Charts
         renderCharts({
-            scoreData: { labels: scoreRanges, data: scoreCounts },
-            statusData: { labels: statusLabels.filter((_, i) => statusCounts[i] > 0), data: statusCounts.filter(c => c > 0), colors: statusColors.filter((_, i) => statusCounts[i] > 0) },
-            vacData: { labels: vacLabels, data: vacScores }
+            statusData: statusData,
+            funnelData: funnelData
         });
 
-        // 4. Update Skills List (Mock extraction from candidates)
-        const allSkills = {};
-        analyzedCandidates.forEach(c => {
-            const skills = c.matched_skills || []; // Assuming backend returns this
-            skills.forEach(s => {
-                allSkills[s] = (allSkills[s] || 0) + 1;
-            });
-        });
-        const sortedSkills = Object.entries(allSkills)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 5)
-            .map(([name, count]) => `<li>${name} (${count})</li>`);
-
-        document.getElementById('top-skills-list').innerHTML = sortedSkills.length ? sortedSkills.join('') : '<li>No skills data yet</li>';
+        // 4. Update Skills List
+        if (data.top_skills && data.top_skills.length) {
+            const skillsHtml = data.top_skills.map(s => `<li>${s}</li>`).join('');
+            document.getElementById('top-skills-list').innerHTML = skillsHtml;
+        }
 
     } catch (e) {
         console.error("Error loading analytics:", e);
     }
 }
 
-function renderCharts({ scoreData, statusData, vacData }) {
-    // We need to inject <canvas> elements first, replacing the chart placeholders in HTML
-    // Wait, the HTML I wrote has Grid but no ID for canvas. Let's assume standard IDs for now or inject them.
-    // Actually the HTML provided by user had Recharts components. I need to Replace HTML content first? 
-    // No, I already overwrote analytics.html with my structure but it needs Canvas IDs.
-
-    // Quick Fix: The analytics.html I wrote in previous step didn't have <canvas> IDs! 
-    // It has `stats-grid` and 2 cards below. I need to INSERT canvas elements.
-    // Let's rewrite the "Charts Grid" section dynamically for now to ensure IDs exist.
-
+function renderCharts({ statusData, funnelData }) {
     const container = document.querySelector('.main-content');
-    // Find the div after stats-grid
-    const existingChartsInfo = document.querySelector('.main-content > div:last-child'); // The grid with Skills/Export
 
-    // Create a new Chart Grid div to insert BEFORE the last div
+    // Remove existing chart grid if present to avoid duplicates during reload
+    const existingGrid = document.getElementById('chart-grid-dynamic');
+    if (existingGrid) existingGrid.remove();
+
     const chartGrid = document.createElement('div');
+    chartGrid.id = 'chart-grid-dynamic';
     chartGrid.className = 'grid grid-cols-1 lg:grid-cols-2 gap-6';
     chartGrid.style.display = 'grid';
     chartGrid.style.gap = '1.5rem';
@@ -109,38 +78,21 @@ function renderCharts({ scoreData, statusData, vacData }) {
     chartGrid.style.marginBottom = '2rem';
 
     chartGrid.innerHTML = `
-        <div class="card">
-            <h3 style="margin-bottom:1rem;">Score Distribution</h3>
-            <div style="height:250px;"><canvas id="scoreChart"></canvas></div>
-        </div>
-        <div class="card">
-            <h3 style="margin-bottom:1rem;">Candidate Status</h3>
-             <div style="height:250px;"><canvas id="statusChart"></canvas></div>
-        </div>
-        <div class="card" style="grid-column: span 1;">
-            <h3 style="margin-bottom:1rem;">Top Vacancies by Score</h3>
-             <div style="height:250px;"><canvas id="vacancyChart"></canvas></div>
-        </div>
-    `;
+            <div class="card">
+                <h3 style="margin-bottom:1rem;">Candidate Status</h3>
+                <div style="height:250px;"><canvas id="statusChart"></canvas></div>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom:1rem;">Hiring Funnel Conversion (%)</h3>
+                 <div style="height:250px;"><canvas id="funnelChart"></canvas></div>
+            </div>
+        `;
 
-    container.insertBefore(chartGrid, existingChartsInfo);
+    // Insert before the last div (usually lists)
+    const lastDiv = document.querySelector('.main-content > div:last-child');
+    container.insertBefore(chartGrid, lastDiv);
 
-    // Chart 1: Score Distribution (Bar)
-    new Chart(document.getElementById('scoreChart'), {
-        type: 'bar',
-        data: {
-            labels: scoreData.labels,
-            datasets: [{
-                label: 'Candidates',
-                data: scoreData.data,
-                backgroundColor: '#8B5CF6',
-                borderRadius: 4
-            }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-
-    // Chart 2: Status (Doughnut)
+    // Chart 1: Status (Doughnut)
     new Chart(document.getElementById('statusChart'), {
         type: 'doughnut',
         data: {
@@ -154,22 +106,24 @@ function renderCharts({ scoreData, statusData, vacData }) {
         options: { responsive: true, maintainAspectRatio: false }
     });
 
-    // Chart 3: Vacancy (Horizontal Bar)
-    new Chart(document.getElementById('vacancyChart'), {
+    // Chart 2: Funnel (Bar or Line)
+    new Chart(document.getElementById('funnelChart'), {
         type: 'bar',
         data: {
-            labels: vacData.labels,
+            labels: funnelData.labels,
             datasets: [{
-                label: 'Avg Score',
-                data: vacData.data,
+                label: 'Conversion Rate %',
+                data: funnelData.data,
                 backgroundColor: '#10B981',
                 borderRadius: 4
             }]
         },
         options: {
-            indexAxis: 'y',
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, max: 100 }
+            }
         }
     });
 }

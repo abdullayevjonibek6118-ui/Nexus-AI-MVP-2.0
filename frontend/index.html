@@ -1,31 +1,109 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus AI - Smart Recruitment</title>
-    <link rel="stylesheet" href="css/main.css">
+    <title>Главная - Nexus AI</title>
+    <link rel="stylesheet" href="css/main.css?v=1.4">
+    <link rel="icon" href="img/logo.jpg" type="image/jpeg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        nav {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #8B5CF6;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #111827;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .btn-hero {
+            display: inline-block;
+            background: #8B5CF6;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(139, 92, 246, 0.4);
+        }
+    </style>
 </head>
+
 <body>
     <nav>
         <div class="container">
-            <h2 style="margin:0; color:var(--primary-color);">Nexus AI</h2>
+            <h2 style="margin:0; color:#8B5CF6;">Nexus AI</h2>
             <div class="nav-links">
-                <a href="login.html">Login</a>
-                <a href="register.html">Sign Up</a>
+                <a href="login.html">Войти</a>
+                <a href="register.html">Регистрация</a>
             </div>
         </div>
     </nav>
-    <div class="container" style="text-align: center; margin-top: 5rem;">
-        <h1 style="font-size: 3rem; margin-bottom: 1rem;">AI-powered candidate screening <br>in minutes</h1>
-        <p style="font-size: 1.25rem; color: #6b7280; max-width: 600px; margin: 0 auto 2rem;">
-            Automate your hiring process with advanced AI analysis. Sort resumes, rate candidates, and hire faster.
+
+    <div class="hero">
+        <h1>Скрининг кандидатов с помощью ИИ<br>за считанные минуты</h1>
+        <p>
+            Автоматизируйте процесс найма с помощью продвинутого AI анализа.
+            Сортируйте резюме, оценивайте кандидатов и нанимайте быстрее.
         </p>
-        <a href="register.html">
-            <button style="width: auto; padding: 1rem 2rem; font-size: 1.1rem;">Get Started</button>
-        </a>
+        <a href="register.html" class="btn-hero">Начать работу</a>
     </div>
 </body>
+
 </html>

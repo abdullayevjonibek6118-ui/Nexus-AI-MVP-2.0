@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidate Report - Nexus AI</title>
-    <link rel="stylesheet" href="css/main.css">
+    <title>Отчет о кандидате - Nexus AI</title>
+    <link rel="stylesheet" href="css/main.css?v=1.4">
     <style>
         .report-grid {
             display: grid;
@@ -28,90 +28,140 @@
     </style>
 </head>
 
-<body class="app-page">
-    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-    <div class="sidebar" id="app-sidebar">
+<!-- Mobile Toggle -->
+<button class="mobile-toggle" onclick="toggleSidebar()">
+    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+</button>
+
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="app-sidebar">
         <div class="sidebar-header">
-            <img src="img/logo.jpg" alt="Nexus AI" class="sidebar-logo">
-            <h3 style="margin:0">Nexus AI</h3>
-        </div>
-        <div class="sidebar-nav">
-            <a href="dashboard.html" class="sidebar-link active">Dashboard</a>
-            <a href="analytics.html" class="sidebar-link">Analytics</a>
-            <a href="#" onclick="Api.logout()" class="sidebar-link">Logout</a>
-        </div>
-    </div>
-
-    <header class="app-header">
-        <div style="display: flex; align-items: center;">
-            <button class="menu-btn" onclick="toggleSidebar()">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
-            <img src="img/logo.jpg" alt="Nexus AI" style="height: 32px; margin-left: 1rem; border-radius: 4px;">
-            <span style="margin-left: 0.75rem; font-weight: 600; font-size: 1.25rem; color: #111827;">Nexus AI</span>
-        </div>
-    </header>
-    <div class="container" id="candidate-view-container">
-        <a href="javascript:history.back()"
-            style="display:block; margin-bottom: 1rem; text-decoration: none; color:#6b7280;">&larr; Back to Vacancy</a>
-
-        <h1 id="candidate-name" style="margin-bottom: 2rem;">Loading Candidate...</h1>
-
-        <div class="report-grid">
-            <div style="background: white; padding: 2rem; border-radius: 0.5rem;">
-                <h3>AI Analysis Summary</h3>
-                <p id="summary-text" style="font-size: 1.1rem; line-height: 1.7;"></p>
-
-                <h3 style="margin-top: 2rem;">Skill Match</h3>
-                <div id="skills-list"></div>
-
-                <h3 style="margin-top: 2rem;">Detailed Recommendation</h3>
-                <p id="recommendation-text"></p>
+            <div class="sidebar-brand">
+                <img src="img/logo.jpg" alt="Logo" style="height: 28px; border-radius: 6px;">
+                Nexus AI
             </div>
+        </div>
+        <nav class="sidebar-nav">
+            <!-- Sidebar items will be injected by sidebar.js -->
+        </nav>
+    </aside>
 
-            <div>
-                <div class="score-box">
-                    <h3>Match Score</h3>
-                    <div id="score-circle" class="score-circle">-</div>
-                    <p style="color: #6b7280; font-size: 0.9rem;">based on job description</p>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div id="candidate-view-container">
+            <a href="javascript:history.back()"
+                style="display:block; margin-bottom: 1rem; text-decoration: none; color:#6b7280;">&larr; Назад к
+                вакансии</a>
+
+            <h1 id="candidate-name" style="margin-bottom: 2rem;">Загрузка кандидата...</h1>
+
+            <div class="report-grid">
+                <div style="background: white; padding: 2rem; border-radius: 0.5rem;">
+                    <h3>Резюме AI Анализа</h3>
+                    <p id="summary-text" style="font-size: 1.1rem; line-height: 1.7;"></p>
+
+                    <h3 style="margin-top: 2rem;">Совпадение навыков</h3>
+                    <div id="skills-list"></div>
+
+                    <h3 style="margin-top: 2rem;">Детальная рекомендация</h3>
+                    <p id="recommendation-text"></p>
                 </div>
 
-                <div
-                    style="background: white; padding: 1.5rem; border-radius: 0.5rem; margin-top: 1rem; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);">
-                    <h3>Actions</h3>
-                    <div style="display: grid; gap: 0.5rem;">
-                        <button class="success" style="background-color: var(--success-color);">Approve for
-                            Screen</button>
-                        <button class="danger">Reject Candidate</button>
+                <div>
+                    <div class="score-box">
+                        <h3>Оценка совпадения</h3>
+                        <div id="score-circle" class="score-circle">-</div>
+                        <p style="color: #6b7280; font-size: 0.9rem;">на основе описания вакансии</p>
+                    </div>
+
+                    <div
+                        style="background: white; padding: 1.5rem; border-radius: 0.5rem; margin-top: 1rem; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);">
+                        <h3>Действия</h3>
+                        <div style="display: grid; gap: 0.5rem;">
+                            <button class="success" style="background-color: var(--success-color);">Одобрить для
+                                собеседования</button>
+                            <button class="danger">Отклонить кандидата</button>
+                        </div>
+                    </div>
+
+                    <!-- AI Outreach Card -->
+                    <div class="card" style="margin-top: 1rem; padding: 1.5rem;">
+                        <h3>AI Связь (HH.ru)</h3>
+                        <p style="font-size:0.9rem; color:#6b7280; margin-bottom:1rem;">Сгенерировать приглашение для
+                            кандидата</p>
+
+                        <div id="outreach-controls">
+                            <button id="btn-gen-outreach" class="btn btn-primary" style="width:100%;"
+                                onclick="generateOutreach()">
+                                ✍️ Написать письмо
+                            </button>
+                        </div>
+
+                        <div id="outreach-result" style="display:none; margin-top:1rem;">
+                            <textarea id="outreach-message" rows="6"
+                                style="width:100%; border:1px solid #ddd; padding:0.5rem; font-size:0.9rem; border-radius:4px;"></textarea>
+                            <button id="btn-send-outreach" class="btn success" style="width:100%; margin-top:0.5rem;"
+                                onclick="sendOutreach()">
+                                🚀 Отправить
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Chat Section -->
-        <div class="card" style="margin-top: 2rem;">
-            <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color);">
-                <h3 style="margin:0;">Candidate Chat</h3>
+            <!-- Chat Section -->
+            <div class="card" style="margin-top: 2rem;">
+                <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color);">
+                    <h3 style="margin:0;">Чат с кандидатом</h3>
+                </div>
+                <div id="chat-messages"
+                    style="min-height: 200px; max-height: 600px; overflow-y: auto; padding: 1.5rem; background: #F1F5F9;">
+                    <div style="text-align: center; color: #94A3B8; padding: 2rem;">Загрузка диалога...</div>
+                </div>
+                <div style="padding: 1rem; border-top: 1px solid var(--border-color); display: flex; gap: 1rem;">
+                    <input type="text" id="chatInput" placeholder="Введите сообщение..." style="flex: 1;"
+                        onkeypress="if(event.key==='Enter') sendChatMessage()">
+                    <button class="btn btn-primary" onclick="sendChatMessage()">Отправить</button>
+                </div>
             </div>
-            <div id="chat-messages"
-                style="height: 300px; overflow-y: auto; padding: 1.5rem; background: #F8FAFC; display: flex; flex-direction: column; gap: 1rem;">
-                <!-- Messages will appear here -->
-                <div style="text-align: center; color: #94A3B8;">No messages yet. Start the conversation!</div>
-            </div>
-            <div style="padding: 1rem; border-top: 1px solid var(--border-color); display: flex; gap: 1rem;">
-                <input type="text" id="chatInput" placeholder="Type a message..." style="flex: 1;"
-                    onkeypress="if(event.key==='Enter') sendChatMessage()">
-                <button class="btn btn-primary" onclick="sendChatMessage()">Send</button>
-            </div>
-        </div>
 
-    </div>
-    <script src="js/api.js"></script>
-    <script src="js/candidates.js"></script>
+            <!-- HR Assistant Section -->
+            <div class="card" style="margin-top: 2rem; border-left: 4px solid var(--primary-color);">
+                <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color);">
+                    <h3 style="margin:0; display:flex; align-items:center; gap:0.5rem;">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none"
+                            stroke-width="2" style="margin-right: 0.5rem; color: var(--primary-color);">
+                            <path
+                                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                            </path>
+                        </svg>
+                        HR Ассистент
+                    </h3>
+                    <p style="margin:0; color:var(--text-muted); font-size:0.9rem;">Задайте вопрос о кандидате или
+                        навыках</p>
+                </div>
+                <div id="hr-chat-messages"
+                    style="height: 200px; overflow-y: auto; padding: 1.5rem; background: #F0F9FF; display: flex; flex-direction: column; gap: 1rem;">
+                    <div style="text-align: center; color: #94A3B8; font-style:italic;">Спросите, например: "Подходит ли
+                        этот кандидат на позицию Senior?"</div>
+                </div>
+                <div style="padding: 1rem; border-top: 1px solid var(--border-color); display: flex; gap: 1rem;">
+                    <input type="text" id="hrChatInput" placeholder="Спросить AI..." style="flex: 1;"
+                        onkeypress="if(event.key==='Enter') sendHRChatMessage()">
+                    <button class="btn btn-primary" onclick="sendHRChatMessage()">Спросить</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+<script src="js/api.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/candidates.js"></script>
 </body>
 
 </html>

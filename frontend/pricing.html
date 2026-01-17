@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тарифы - Nexus AI</title>
+    <link rel="stylesheet" href="css/main.css?v=1.4">
+    <link rel="icon" href="img/logo.jpg" type="image/jpeg">
+    <style>
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #E2E8F0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 25px -5px rgba(4, 242, 250, 0.2);
+        }
+
+        .pricing-card.current {
+            background: #F8FAFC;
+        }
+
+        .current-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #10B981;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .tier-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1E293B;
+            margin-bottom: 0.5rem;
+        }
+
+        .tier-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0F172A;
+            margin-bottom: 1.5rem;
+        }
+
+        .tier-price span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #64748B;
+        }
+
+        .tier-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem 0;
+            flex: 1;
+        }
+
+        .tier-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: #475569;
+        }
+
+        .tier-features svg {
+            color: #10B981;
+            flex-shrink: 0;
+        }
+
+        .btn-pricing {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-pricing-outline {
+            border: 2px solid #E2E8F0;
+            color: #475569;
+        }
+
+        .btn-pricing-outline:hover {
+            border-color: #CBD5E1;
+            background: #F8FAFC;
+        }
+
+        .btn-pricing-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0891B2 100%);
+            color: black;
+            border: none;
+        }
+
+        .btn-pricing-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(4, 242, 250, 0.4);
+        }
+
+        .subscription-status-banner {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #E2E8F0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-container {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 2rem;
+        }
+
+        .progress-bar-bg {
+            background: var(--bg-color);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease, background-color 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar (copy from dashboard) -->
+        <aside class="sidebar" id="app-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <img src="img/logo.jpg" alt="Logo" style="height: 28px; border-radius: 6px;">
+                    Nexus AI
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    </svg>
+                    Дашборд
+                </a>
+                <a href="vacancies.html" class="sidebar-link">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Вакансии
+                </a>
+                <a href="candidates.html" class="sidebar-link">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    Кандидаты
+                </a>
+                <a href="pricing.html" class="sidebar-link active">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zM12 18c-3.314 0-6-2.686-6-6s2.686-6 6-6 6 2.686 6 6-2.686 6-6 6z" />
+                    </svg>
+                    Тарифы
+                </a>
+                <div style="flex:1"></div>
+                <a href="#" onclick="Api.logout()" class="sidebar-link">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Выйти
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div style="margin-bottom: 2rem;">
+                <h1 style="font-size: 2rem; font-weight: 700; color:#111827;">Тарифные планы</h1>
+                <p style="color: #64748B;">Выберите подходящий план для масштабирования вашего найма</p>
+            </div>
+
+            <!-- Current Status Banner -->
+            <div id="status-banner" class="subscription-status-banner" style="display: none;">
+                <div>
+                    <h4 id="status-tier-name" style="margin-bottom: 0.25rem;">Загрузка...</h4>
+                    <p id="status-days-left" style="font-size: 0.875rem; color: #64748B;"></p>
+                </div>
+                <div class="progress-container">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600;">
+                        <span>Использовано резюме</span>
+                        <span id="status-usage-text">0 / 0</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="status-progress-bar" class="progress-bar-fill"
+                            style="width: 0%; background-color: #10B981;"></div>
+                    </div>
+                </div>
+                <div id="status-badge"></div>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Start Plan -->
+                <div class="pricing-card" id="card-START">
+                    <div class="tier-name">Start</div>
+                    <div class="tier-price">15 000 ₽<span>/мес</span></div>
+                    <ul class="tier-features">
+                        <li>
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            100 резюме в месяц
+                        </li>
+                        <li>
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            AI скрининг и скоринг
+                        </li>
+                        <li>
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            Интеграция с HH.ru
+                        </li>
+                    </ul>
+                    <button class="btn-pricing btn-pricing-outline">Выбрать план</button>
+                </div>
+
+                <!-- Basic Plan -->
+                <div class="pricing-card featured" id="card-BASIC">
+                    <div class="tier-name">Basic</div>
+                    <div class="tier-price">75 000 ₽<span>/мес</span></div>
+                    <ul class="tier-features">
+                        <li>
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            500 резюме в месяц
+                        </li>
+                        <li>
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            Приоритетная поддержка
+                        </li>
+                        <li>
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            Умный чат с кандидатами
+                        </li>
+                    </ul>
+                    <button class="btn-pricing btn-pricing-primary">Популярный выбор</button>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="pricing-card" id="card-PRO">
+                    <div class="tier-name">Pro</div>
+                    <div class="tier-price">250 000 ₽<span>/мес</span></div>
+                    <ul class="tier-features">
+                        <li>
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            Безлимитно резюме
+                        </li>
+                        <li>
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            Персональный менеджер
+                        </li>
+                        <li>
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            API интеграция
+                        </li>
+                    </ul>
+                    <button class="btn-pricing btn-pricing-outline">Связаться с нами</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script>
+        async function loadSubscriptionStatus() {
+            try {
+                const status = await Api.get('/candidates/subscription/status');
+                const banner = document.getElementById('status-banner');
+                banner.style.display = 'flex';
+
+                document.getElementById('status-tier-name').innerText = `Ваш тариф: ${status.tier_name}`;
+
+                if (status.is_trial) {
+                    document.getElementById('status-days-left').innerText = `Осталось дней пробного периода: ${status.days_left}`;
+                } else {
+                    document.getElementById('status-days-left').innerText = 'Активная подписка';
+                }
+
+                const used = status.used;
+                const limit = status.limit;
+                const percent = Math.min(100, (used / limit) * 100);
+
+                document.getElementById('status-usage-text').innerText = `${used} / ${limit}`;
+                const progressBar = document.getElementById('status-progress-bar');
+                progressBar.style.width = `${percent}%`;
+
+                // Color logic
+                const remaining = 100 - percent;
+                if (remaining > 50) {
+                    progressBar.style.backgroundColor = '#10B981'; // Green
+                } else if (remaining > 20) {
+                    progressBar.style.backgroundColor = '#F59E0B'; // Yellow/Orange
+                } else {
+                    progressBar.style.backgroundColor = '#EF4444'; // Red
+                }
+
+                // Highlight current tier card
+                const currentCard = document.getElementById(`card-${status.tier}`);
+                if (currentCard) {
+                    currentCard.classList.add('current');
+                    const badge = document.createElement('div');
+                    badge.className = 'current-badge';
+                    badge.innerText = 'Текущий план';
+                    currentCard.appendChild(badge);
+
+                    const btn = currentCard.querySelector('button');
+                    if (btn) btn.innerText = 'Управление';
+                }
+
+            } catch (err) {
+                console.error('Failed to load subscription status', err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSubscriptionStatus);
+    </script>
+</body>
+
+</html>

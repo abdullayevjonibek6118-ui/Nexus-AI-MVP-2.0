@@ -57,7 +57,7 @@ function resetToDefaults() {
         document.getElementById('ai_role').value = 'Эксперт по подбору персонала';
         document.getElementById('system_prompt').value = `Вы - опытный HR-специалист с глубокими знаниями в области подбора персонала. 
 Ваша задача - объективно оценивать кандидатов на соответствие требованиям вакансии и предоставлять практические рекомендации.`;
-        document.getElementById('model_name').value = 'x-ai/grok-4.1-fast';
+        document.getElementById('model_name').value = 'GigaChat';
         document.getElementById('temperature').value = '0.7';
         document.getElementById('temp-value').textContent = '0.7';
     }

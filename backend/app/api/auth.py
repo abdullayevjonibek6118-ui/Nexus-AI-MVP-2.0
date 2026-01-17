@@ -1,5 +1,4 @@
-
-from datetime import timedelta
+from datetime import datetime, timedelta
 from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -53,9 +52,57 @@ def register_user(
     user = User(
         email=user_in.email,
         hashed_password=security.get_password_hash(user_in.password),
+        full_name=user_in.full_name,
         is_active=True,
+        trial_start_date=datetime.utcnow(),
+        subscription_tier="FREE",
     )
     db.add(user)
     db.commit()
     db.refresh(user)
     return user
+
+# HH.ru OAuth Endpoints
+
+@router.get("/hh/authorize")
+def authorize_hh(
+    current_user: User = Depends(deps.get_current_user),
+):
+    """Returns the authorization URL for HH.ru with state for security."""
+    from app.services.hh import hh_service
+    # We use user email or ID as state (should be encrypted/signed in production)
+    # For MVP, we'll use a simple string; in real app, use a CSRF token.
+    auth_url = hh_service.get_auth_url() + f"&state={current_user.id}"
+    return {"url": auth_url}
+
+@router.get("/hh/callback")
+def callback_hh(
+    code: str,
+    state: str = None,
+    db: Session = Depends(deps.get_db),
+):
+    """Handles callback, exchanges code, and saves token to user matching state."""
+    from app.services.hh import hh_service
+    token_data = hh_service.get_token(code)
+    
+    if "error" in token_data:
+        raise HTTPException(status_code=400, detail=f"HH.ru Error: {token_data['error']}")
+    
+    if not state:
+        raise HTTPException(status_code=400, detail="Missing state parameter")
+    
+    # Update user in DB
+    user = db.query(User).filter(User.id == int(state)).first()
+    if not user:
+         raise HTTPException(status_code=404, detail="User in state not found")
+         
+    user.hh_access_token = token_data.get("access_token")
+    user.hh_refresh_token = token_data.get("refresh_token")
+    db.add(user)
+    db.commit()
+    
+    # Redirect back to frontend settings or dashboard
+    from fastapi.responses import RedirectResponse
+    # return RedirectResponse(url="http://localhost:3000/settings.html?hh=connected")
+    # For now, return JSON so user sees it worked
+    return {"status": "success", "message": "HH.ru account connected successfully"}
